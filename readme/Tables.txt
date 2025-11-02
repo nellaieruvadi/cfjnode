@@ -1,0 +1,36 @@
+CVFOR JOBS
+----------------------------
+
+06-Sep-2025
+
+
+TABLES
+
+
+
+
+INSERT INTO users (full_name, email, password_hash, role, phone_number, company_name, resume_link, status) VALUES
+-- Admin
+('Site Admin', 'admin@cvforjobs.com', 'hashed_admin_pass', 'admin', NULL, NULL, NULL, 'active'),
+
+-- Employers
+('John Recruiter', 'john.hr@techcorp.com', 'hashed_password1', 'employer', '+971500000001', 'TechCorp Solutions', NULL, 'active'),
+('Sara Manager', 'sara.hr@sarahr.com', 'sarahr@123', 'employer', '+971500000002', 'FinBank International', NULL, 'active'),
+
+-- Job Seekers
+('Ali Khan', 'ali.khan@alikhan.com', 'alikhan', 'job_seeker', '+971500000003', NULL, 'resumes/ali_khan_resume.pdf', 'active'),
+('Priya Sharma', 'priya.sharma@example.com', 'hashed_password4', 'job_seeker', '+971500000004', NULL, 'resumes/priya_resume.pdf', 'active'),
+('Michael Lee', 'michael.lee@example.com', 'hashed_password5', 'job_seeker', '+971500000005', NULL, 'resumes/michael_resume.pdf', 'inactive');
+
+
+
+
+===============
+CANDIDATE
+
+Ali Khan / ali.khan@alikhan.com / alikhan@123
+
+
+EMPLOYER
+Sara Manager / sara.hr@sarahr.com / sarahr@123
+

@@ -1,0 +1,127 @@
+<%- include("../partials/header") %>
+
+        <div class="container-xxl py-5 bg-dark page-header jobs mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Jobs</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Jobs</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+
+
+<!-- Form Start -->
+
+<div class="container mb-5">
+
+</div>
+
+<!-- Form End -->
+
+
+<!-- Adzuna Jobs Start -->
+
+<div class="container-xxl">
+ <div class="container mt-5">
+    <h2 class="mb-4">Jobs for "<%= keyword %>" in "<%= country %> <!-- " For  <br> "<%= fullURL %> " --></h2>
+
+    <% if (jobs.length === 0) { %>
+      <p class="text-muted">No jobs found.</p>
+    <% } %>
+
+     <!--
+    <% jobs.forEach(job => { %>
+      <div class="card mb-3 shadow-sm">
+         <div class="card-body">
+            <h5 class="card-title mb-2"><%= job.title %></h5>
+            <h6 class="card-subtitle mb-3 text-muted">
+                      <% if (job.company && job.company.display_name) { %>
+               <small class="text-primary me-3">
+                <%= job.company.display_name %>
+                </small>
+              <% } %>
+              <% if (job.location && job.location.display_name) { %>
+                <small class="text-muted">
+               <%= job.location.display_name %>
+                </small>
+              <% } %>
+            </h6>
+            <p class="card-text">
+              <%= job.description ? job.description.substring(0, 200) : 'No description available.' %>...
+            </p>
+            <a href="<%= job.redirect_url %>" target="_blank" class="btn btn-primary btn-sm">
+              View Job
+            </a>
+          </div>
+      </div>
+    <% }); %>
+  </div>
+
+-->
+    <% jobs.forEach(job => { %>
+  <div class="job-item p-4 mb-4">
+    <div class="row g-4">
+      
+      <!-- Left side: Logo + Job Info -->
+      <div class="col-sm-12 col-md-8 d-flex align-items-center">
+
+        <div class="text-start ps-4">
+          <h5 class="mb-3"><%= job.title %></h5>
+          
+          <% if (job.location && job.location.display_name) { %>
+            <span class="text-truncate me-3">
+              <i class="fa fa-map-marker-alt text-primary me-2"></i> 
+              <%= job.location.display_name %>
+            </span>
+          <% } %>
+          
+          <% if (job.contract_time) { %>
+            <span class="text-truncate me-3">
+              <i class="far fa-clock text-primary me-2"></i> 
+              <%= job.contract_time %>
+            </span>
+          <% } %>
+
+          <% if (job.salary_min && job.salary_max) { %>
+            <span class="text-truncate me-0">
+              <i class="far fa-money-bill-alt text-primary me-2"></i> 
+              $<%= job.salary_min %> - $<%= job.salary_max %>
+            </span>
+          <% } %>
+          
+        </div>
+      </div>
+
+      <!-- Right side: Buttons + Date -->
+      <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+        <div class="d-flex mb-3">
+          <a class="btn btn-light btn-square me-3" href="#">
+            <i class="far fa-heart text-primary"></i>
+          </a>
+          <a class="btn btn-primary" href="<%= job.redirect_url %>" target="_blank">
+            Apply Now
+          </a>
+        </div>
+
+        <% if (job.created) { %>
+          <small class="text-truncate">
+            <i class="far fa-calendar-alt text-primary me-2"></i> 
+            Posted: <%= new Date(job.created).toLocaleDateString() %>
+          </small>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+<% }); %>
+
+</div>
+        <!-- Adzuna Jobs End -->
+
+
+   <%- include("../partials/footer") %>

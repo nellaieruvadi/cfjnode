@@ -1,0 +1,8 @@
+<!-- views/pages/jobsearch.ejs -->
+<form action="/jobs" method="get" class="job-search-form">
+  <input type="text" name="keyword" placeholder="Job title or keyword" value="<%= keyword || '' %>" required />
+  
+  <input type="text" name="location" placeholder="Location" value="<%= location || '' %>" required />
+  
+  <button type="submit">Search Jobs</button>
+</form>

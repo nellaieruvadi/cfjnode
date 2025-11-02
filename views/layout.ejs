@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <% include partials/header %>
+
+  <%- body %> <!-- This is where each page gets injected -->
+
+  <% include partials/footer %>
+  <script src="/js/script.js"></script>
+</body>
+</html>

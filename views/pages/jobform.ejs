@@ -1,0 +1,27 @@
+<!-- views/pages/jobs.ejs -->
+<%- include("../partials/header") %>
+
+
+
+
+<%- include("../partials/jobsearch-form", {
+  keyword: typeof keyword !== 'undefined' ? keyword : '',
+  location: typeof location !== 'undefined' ? location : ''
+}) %>
+
+
+<ul class="job-results">
+  <% if (jobs.length > 0) { %>
+    <% jobs.forEach(job => { %>
+      <li>
+        <h3><a href="<%= job.redirect_url %>"><%= job.title %></a></h3>
+        <p><%= job.location.display_name %> | <%= job.company.display_name %></p>
+        <p><%= job.description.slice(0, 150) %>...</p>
+      </li>
+    <% }) %>
+  <% } else { %>
+    <li>No jobs found for the given search.</li>
+  <% } %>
+</ul>
+
+<%- include("../partials/footer") %>

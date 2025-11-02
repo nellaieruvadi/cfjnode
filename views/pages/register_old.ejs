@@ -1,0 +1,97 @@
+
+
+<!-- register.ejs -->
+<%- include("../partials/header") %>
+
+       <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown"><%=title%></h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page"><%=pagename%></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    form { max-width: 500px; margin: auto; }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+  </style>
+
+  <h2>User Registration</h2>
+
+ <form id="registerForm" enctype="multipart/form-data">
+  <h3>Register as:</h3>
+  <label>
+    <input type="radio" name="userType" value="candidate" checked> Candidate
+  </label>
+  <label>
+    <input type="radio" name="userType" value="employer"> Employer
+  </label>
+
+  <div id="commonFields">
+    <h4>Common Details</h4>
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <input type="file" name="profilePicture" accept="image/*" />
+    <input type="tel" name="contactNumber" placeholder="Contact Number" required />
+    <input type="text" name="linkedin" placeholder="LinkedIn Profile" />
+    <input type="text" name="city" placeholder="City" />
+    <input type="text" name="country" placeholder="Country" />
+  </div>
+
+  <div id="candidateFields">
+    <h4>Candidate Details</h4>
+    <select name="gender">
+      <option value="">Select Gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+    <input type="date" name="dob" placeholder="Date of Birth" />
+  </div>
+
+  <div id="employerFields" style="display: none;">
+    <h4>Employer Details</h4>
+    <input type="text" name="companyName" placeholder="Company Name" />
+    <input type="text" name="contactPerson" placeholder="Contact Person Name" />
+    <input type="url" name="website" placeholder="Company Website" />
+  </div>
+
+  <button type="submit">Register</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const userTypeRadios = document.querySelectorAll('input[name="userType"]');
+  const candidateFields = document.getElementById('candidateFields');
+  const employerFields = document.getElementById('employerFields');
+
+  function toggleFields() {
+    const selected = document.querySelector('input[name="userType"]:checked').value;
+    if (selected === 'candidate') {
+      candidateFields.style.display = 'block';
+      employerFields.style.display = 'none';
+    } else {
+      candidateFields.style.display = 'none';
+      employerFields.style.display = 'block';
+    }
+  }
+
+  userTypeRadios.forEach(radio => {
+    radio.addEventListener('change', toggleFields);
+  });
+
+  toggleFields(); // Run on page load
+});
+</script>
+ 
+<%- include("../partials/footer") %>
