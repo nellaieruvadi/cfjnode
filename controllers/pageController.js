@@ -10,18 +10,23 @@ function ensureLoggedIn(req, res, next) {
 
 // ✅ Updated homePage to show username if logged in
 exports.homePage = async (req, res) => {
-  const keyword = req.query.keyword || 'it-jobs';
-  const country = req.query.country || 'IN'; // default to India
-  const { jobs, fullURL } = await adzunaService.fetchJobsByCountry(keyword, country);
+  try {
+    const keyword = req.query.keyword || 'it-jobs';
+    const country = req.query.country || 'IN'; // default to India
+    const { jobs, fullURL } = await adzunaService.fetchJobsByCountry(keyword, country);
 
-  res.render("pages/home", {
-    title: "Home",
-    keyword,
-    country,
-    fullURL,
-    jobsCountry: jobs,
-    username: req.session.user ? req.session.user.username : null // ✅ Pass username to EJS
-  });
+    res.render("pages/home", {
+      title: "Home",
+      keyword,
+      country,
+      fullURL,
+      jobsCountry: jobs,
+      username: req.session.user ? req.session.user.username : null // ✅ Pass username to EJS
+    });
+  } catch (err) {
+    console.error('Error loading home page:', err);
+    res.status(500).render('error', { error: 'Failed to load home page' });
+  }
 };
 
 // ✅ For other pages, also pass username (optional)

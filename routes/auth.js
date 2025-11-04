@@ -1,9 +1,7 @@
 // routes/auth.js
 const express = require('express');
 const bcrypt = require('bcrypt');
-const pool = require('../db'); // <-- keep this if your pool file is at projectRoot/routes/db.js
-// If your pool is at ../config/db (as used elsewhere), change to:
-// const pool = require('../config/db'); // ===== NOTE =====
+const pool = require('../config/db');
 
 const router = express.Router();
 

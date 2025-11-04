@@ -1,4 +1,4 @@
-// controllers/userController.js
+// controllers/loginController.js
 const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 
@@ -51,7 +51,7 @@ exports.loginUser = async (req, res) => {
 
       req.session.save(saveErr => {
         if (saveErr) console.error('Session save error:', saveErr);
-        return res.redirect('/home'); // redirect to home page after login
+        return res.redirect('/'); // redirect to home page after login
       });
     });
     // ===== END MODIFIED =====
