@@ -1,7 +1,8 @@
 const axios = require('axios');
+require('dotenv').config();
 
-const APP_ID = 'f535a364';
-const APP_KEY = '7ab12cf8dab485f7c88a0018c9a52440';
+const APP_ID = process.env.ADZUNA_APP_ID;
+const APP_KEY = process.env.ADZUNA_APP_KEY;
 
 async function fetchJobs(keyword = 'it-jobs', location = 'Tamil Nadu') {
   const apiURL = 'https://api.adzuna.com/v1/api/jobs/in/search/1';

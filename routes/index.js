@@ -5,7 +5,6 @@ router.use("/users", userRoutes);
 
 const pageController = require("../controllers/pageController");
 const jobController = require("../controllers/jobController");
-const axios = require('axios');
 
 // ===== MODIFIED =====
 // Import the ensureLoggedIn middleware from pageController

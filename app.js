@@ -20,12 +20,16 @@ app.use(express.json());
 
 // ----------------- SESSION & AUTH SETUP -----------------
 // Initialize session middleware (must be before routes that rely on req.session)
+if (!process.env.SESSION_SECRET) {
+  console.warn('WARNING: SESSION_SECRET not set in environment variables. Using a random secret.');
+}
+
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "mysecretkey",
+    secret: process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex'),
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // set true if using HTTPS
+    cookie: { secure: process.env.NODE_ENV === 'production' } // set true for HTTPS in production
   })
 );
 
