@@ -3,7 +3,7 @@ const adzunaService = require('../services/adzunaService'); // keep this import
 // ✅ Helper to check login session
 function ensureLoggedIn(req, res, next) {
   if (!req.session.user) {
-    return res.redirect('/auth/login'); // redirect if not logged in
+    return res.redirect('/login'); // redirect if not logged in
   }
   next();
 }
