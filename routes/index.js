@@ -6,17 +6,12 @@ router.use("/users", userRoutes);
 const pageController = require("../controllers/pageController");
 const jobController = require("../controllers/jobController");
 
-// ===== MODIFIED =====
 // Import the ensureLoggedIn middleware from pageController
-// (ensureLoggedIn checks req.session.user and redirects to /auth/login if not logged in)
+// Use this middleware on routes that require authentication
 const { ensureLoggedIn } = require("../controllers/pageController");
-// ===== END MODIFIED =====
 
-// ===== MODIFIED =====
-// Protect the home route so only logged-in users can access it.
-// If you prefer home to be public, remove ensureLoggedIn from this route.
-router.get("/", ensureLoggedIn, pageController.homePage);
-// ===== END MODIFIED =====
+// Home page is now public - users can view without logging in
+router.get("/", pageController.homePage);
 
 router.get("/about", pageController.aboutPage);
 router.get("/contact", pageController.contactPage);
@@ -26,10 +21,9 @@ router.get("/joblist", pageController.joblistPage);
 router.get("/jobsearchtips", pageController.jobsearchtipsPage);
 router.get("/resumetips", pageController.resumetipsPage);
 
-// ===== MODIFIED =====
-// Protect job form — only logged-in users can access job posting/search form
+// Protected route - requires login
+// Add ensureLoggedIn middleware to any route that needs authentication
 router.get("/jobform", ensureLoggedIn, pageController.jobformPage);
-// ===== END MODIFIED =====
 
 router.get("/register", pageController.registerPage);
 router.get("/login", pageController.loginPage);
