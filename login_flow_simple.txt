@@ -1,0 +1,122 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                        LOGIN FLOW ARCHITECTURE                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+                            ┌──────────────┐
+                            │   Browser    │
+                            │   (User)     │
+                            └──────┬───────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    │              │              │
+              GET /login    POST /auth/login   GET /
+                    │              │              │
+                    ▼              ▼              ▼
+              ┌─────────────────────────────────────┐
+              │          app.js (Express)           │
+              │  • express-session middleware       │
+              │  • body-parser middleware           │
+              │  • route mounting                   │
+              └─────────────────────────────────────┘
+                    │              │              │
+        ┌───────────┘              │              └───────────┐
+        │                          │                          │
+        ▼                          ▼                          ▼
+  ┌─────────┐            ┌──────────────┐           ┌─────────────┐
+  │ routes/ │            │   routes/    │           │   routes/   │
+  │index.js │            │   auth.js    │           │  index.js   │
+  └────┬────┘            └──────┬───────┘           └──────┬──────┘
+       │                        │                          │
+       │ loginPage              │ loginUser                │ homePage
+       ▼                        ▼                          ▼
+  ┌──────────────────┐   ┌──────────────────┐   ┌────────────────┐
+  │ controllers/     │   │  controllers/    │   │  controllers/  │
+  │pageController.js │   │loginController.js│   │pageController  │
+  │                  │   │                  │   │     .js        │
+  │ • Render login   │   │ • Validate input │   │ • Check auth   │
+  │   form           │   │ • Query database │   │ • Fetch jobs   │
+  └──────────────────┘   │ • Verify password│   │ • Render home  │
+                         │ • Create session │   └────────┬───────┘
+                         │ • Redirect to /  │            │
+                         └────────┬─────────┘            │
+                                  │                      │
+                   ┌──────────────┘                      │
+                   │                                     │
+                   ▼                                     ▼
+         ┌──────────────────┐              ┌──────────────────────┐
+         │    config/db.js  │              │  services/           │
+         │                  │              │  adzunaService.js    │
+         │  MySQL Pool      │              │                      │
+         └────────┬─────────┘              │  Fetch job listings  │
+                  │                        └──────────────────────┘
+                  ▼
+         ┌──────────────────┐
+         │  MySQL Database  │
+         │                  │
+         │  users table:    │
+         │  • id            │
+         │  • username      │
+         │  • email         │
+         │  • password      │
+         │  • userType      │
+         └──────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+STEP-BY-STEP FLOW:
+
+1. User visits /login
+   → routes/index.js → pageController.loginPage()
+   → Renders views/pages/login.ejs
+
+2. User submits login form (POST /auth/login)
+   → routes/auth.js → loginController.loginUser()
+   
+3. loginController.loginUser() process:
+   a) Extract email & password from req.body
+   b) Validate input (check if empty)
+   c) Query database: SELECT * FROM users WHERE email = ?
+   d) Compare password with bcrypt.compare()
+   e) If valid:
+      - req.session.regenerate()
+      - Store user in req.session.user
+      - req.session.save()
+      - Redirect to / (home page)
+   f) If invalid: Re-render login with error
+
+4. After redirect to /
+   → routes/index.js → ensureLoggedIn middleware
+   → Check if req.session.user exists
+   → If yes: pageController.homePage()
+   → If no: Redirect to /auth/login
+
+5. homePage() renders home with job listings
+   → Fetches jobs from Adzuna API
+   → Renders views/pages/home.ejs with username
+
+═══════════════════════════════════════════════════════════════════════════
+
+KEY FILES & THEIR ROLES:
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ app.js                     │ Main entry, middleware setup, route mounting │
+├──────────────────────────────────────────────────────────────────────────┤
+│ routes/index.js            │ GET /login, GET / (with auth middleware)     │
+├──────────────────────────────────────────────────────────────────────────┤
+│ routes/auth.js             │ POST /auth/login, GET /auth/logout           │
+├──────────────────────────────────────────────────────────────────────────┤
+│ controllers/pageController │ Render pages (login, home, etc.)             │
+├──────────────────────────────────────────────────────────────────────────┤
+│ controllers/loginController│ Handle authentication logic                  │
+├──────────────────────────────────────────────────────────────────────────┤
+│ config/db.js               │ MySQL connection pool                        │
+├──────────────────────────────────────────────────────────────────────────┤
+│ services/adzunaService.js  │ Fetch jobs from external API                 │
+└──────────────────────────────────────────────────────────────────────────┘
+
+SESSION MANAGEMENT:
+• Created by express-session middleware in app.js
+• User data stored in req.session.user after successful login
+• Checked by ensureLoggedIn middleware before accessing protected routes
+• Destroyed on logout via req.session.destroy()
+
