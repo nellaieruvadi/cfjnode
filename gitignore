@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# Env
+.env
+.env.local
+
+# Archives
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+
+# Backup folders
+_backup/
+_Backup/
+
+# Build / output
+dist/
+build/
+coverage/
+
+# Editors/OS
+.DS_Store
+.vscode/
+.idea/
