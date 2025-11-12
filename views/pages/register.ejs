@@ -1,148 +1,97 @@
+
+
 <!-- register.ejs -->
 <%- include("../partials/header") %>
 
-<div class="container-xxl py-5 bg-dark page-header mb-5">
-  <div class="container my-5 pt-5 pb-4">
-    <h1 class="display-3 text-white mb-3 animated slideInDown"><%=title%></h1>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb text-uppercase">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Pages</a></li>
-        <li class="breadcrumb-item text-white active" aria-current="page"><%=pagename%></li>
-      </ol>
-    </nav>
+       <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown"><%=title%></h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page"><%=pagename%></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    form { max-width: 500px; margin: auto; }
+    label { display: block; margin-top: 10px; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+  </style>
+
+  <h2>User Registration</h2>
+
+ <form id="registerForm" enctype="multipart/form-data">
+  <h3>Register as:</h3>
+  <label>
+    <input type="radio" name="userType" value="candidate" checked> Candidate
+  </label>
+  <label>
+    <input type="radio" name="userType" value="employer"> Employer
+  </label>
+
+  <div id="commonFields">
+    <h4>Common Details</h4>
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <input type="file" name="profilePicture" accept="image/*" />
+    <input type="tel" name="contactNumber" placeholder="Contact Number" required />
+    <input type="text" name="linkedin" placeholder="LinkedIn Profile" />
+    <input type="text" name="city" placeholder="City" />
+    <input type="text" name="country" placeholder="Country" />
   </div>
-</div>
-<!-- Header End -->
 
-<style>
-  .card {
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    padding: 20px;
-    cursor: pointer;
-    text-align: center;
-    transition: 0.3s;
-  }
-  .card:hover {
-    border-color: #4f46e5;
-    background: #f0f4ff;
-  }
-  .card.selected {
-    border-color: #4f46e5;
-    background: #e0e7ff;
-  }
-  .hidden { display: none; }
-</style>
-
-<div id="step1">
-  <h3>Select User Type</h3>
-  <div style="display: flex; gap: 20px; margin-bottom: 20px;">
-    <div class="card" onclick="selectUserType('candidate')">
-      <h4>👤 Candidate</h4>
-      <p>Register to apply for jobs</p>
-    </div>
-    <div class="card" onclick="selectUserType('employer')">
-      <h4>🏢 Employer</h4>
-      <p>Register to post jobs</p>
-    </div>
+  <div id="candidateFields">
+    <h4>Candidate Details</h4>
+    <select name="gender">
+      <option value="">Select Gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+    <input type="date" name="dob" placeholder="Date of Birth" />
   </div>
-  <button onclick="goToStep(2)" disabled id="nextBtn">Next</button>
-</div>
 
-<div id="step2" class="hidden">
-  <h3>Step 2: Registration Info</h3>
-  <form id="registerForm" onsubmit="submitForm(event)">
-    <input type="text" name="username" placeholder="Username" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <input type="password" name="password" placeholder="Password" required><br>
-    <!-- Disabled file upload now
-    <input type="file" name="profilePicture" accept="image/*"><br> -->
-    <input type="tel" name="contactNumber" placeholder="Contact Number"><br>
-    <input type="text" name="linkedin" placeholder="LinkedIn Profile"><br>
-    <input type="text" name="city" placeholder="City"><br>
-    <input type="text" name="country" placeholder="Country"><br>
+  <div id="employerFields" style="display: none;">
+    <h4>Employer Details</h4>
+    <input type="text" name="companyName" placeholder="Company Name" />
+    <input type="text" name="contactPerson" placeholder="Contact Person Name" />
+    <input type="url" name="website" placeholder="Company Website" />
+  </div>
 
-    <!-- Candidate specific -->
-    <div id="candidateFields" class="hidden">
-      <select name="gender">
-        <option value="">Select Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select><br>
-      <input type="date" name="dob" placeholder="Date of Birth"><br>
-    </div>
-
-    <!-- Employer specific -->
-    <div id="employerFields" class="hidden">
-      <input type="text" name="companyName" placeholder="Company Name"><br>
-      <input type="text" name="contactPerson" placeholder="Contact Person Name"><br>
-      <input type="url" name="website" placeholder="Company Website"><br>
-    </div>
-
-    <button type="submit">Submit</button>
-  </form>
-</div>
+  <button type="submit">Register</button>
+</form>
 
 <script>
-let selectedType = '';
+document.addEventListener('DOMContentLoaded', function () {
+  const userTypeRadios = document.querySelectorAll('input[name="userType"]');
+  const candidateFields = document.getElementById('candidateFields');
+  const employerFields = document.getElementById('employerFields');
 
-function selectUserType(type) {
-  selectedType = type;
-  document.querySelectorAll('.card').forEach(card => card.classList.remove('selected'));
-  const selectedCard = document.querySelector(`.card[onclick*="${type}"]`);
-  selectedCard.classList.add('selected');
-  document.getElementById('nextBtn').disabled = false;
-}
-
-function goToStep(step) {
-  document.querySelectorAll('#step1, #step2').forEach(el => el.classList.add('hidden'));
-  document.getElementById(`step${step}`).classList.remove('hidden');
-
-  if (step === 2) {
-    if (selectedType === 'candidate') {
-      document.getElementById('candidateFields').style.display = 'block';
-      document.getElementById('employerFields').style.display = 'none';
+  function toggleFields() {
+    const selected = document.querySelector('input[name="userType"]:checked').value;
+    if (selected === 'candidate') {
+      candidateFields.style.display = 'block';
+      employerFields.style.display = 'none';
     } else {
-      document.getElementById('candidateFields').style.display = 'none';
-      document.getElementById('employerFields').style.display = 'block';
+      candidateFields.style.display = 'none';
+      employerFields.style.display = 'block';
     }
   }
-}
 
-// Handle Submit 
-async function submitForm(event) {
-  event.preventDefault(); // stop normal form submission
-  const form = document.getElementById('registerForm');
-  const formData = new FormData(form);
+  userTypeRadios.forEach(radio => {
+    radio.addEventListener('change', toggleFields);
+  });
 
-  // Add the selected user type
-  formData.append('userType', selectedType);
-
-  // Convert FormData to JSON
-  const jsonData = {};
-  formData.forEach((value, key) => { jsonData[key] = value; });
-
-  try {
-    const response = await fetch('/api/users/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(jsonData),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      alert('Registration successful!');
-      window.location.href = '/login'; // redirect to login page
-    } else {
-      alert(data.error || 'Registration failed');
-    }
-  } catch (err) {
-    console.error(err);
-    alert('Something went wrong!');
-  }
-}
+  toggleFields(); // Run on page load
+});
 </script>
-
+ 
 <%- include("../partials/footer") %>
